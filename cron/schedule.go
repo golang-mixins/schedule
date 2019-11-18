@@ -1,9 +1,9 @@
-// Package v1 implements interfaces schedule.
-package v1
+// Package cron implements interfaces schedule.
+package cron
 
 import (
-	"github.com/antparcse/schedule"
-	"github.com/robfig/cron/v3" // "gopkg.in/robfig/cron.v3"
+	"github.com/golang-mixins/schedule"
+	Cron "github.com/robfig/cron/v3" // "gopkg.in/robfig/cron.v3"
 	"golang.org/x/xerrors"
 	"io"
 	"log"
@@ -12,7 +12,7 @@ import (
 // Scheduler defines the structure implements interfaces schedule.
 // Using structure methods without initialization with the New constructor will lead to panic.
 type Scheduler struct {
-	*cron.Cron
+	*Cron.Cron
 }
 
 // AddTask - adds an executable task to the scheduler.
@@ -28,20 +28,20 @@ func (s *Scheduler) AddTask(spec string, cmd func()) error {
 // Reset - resets the scheduler, making it again available without any tasks on it.
 func (s *Scheduler) Reset() {
 	go s.Stop()
-	*s = Scheduler{cron.New()}
+	*s = Scheduler{Cron.New()}
 }
 
 // New - constructor Scheduler.
 func New(logOut io.Writer) schedule.Scheduler {
 	return &Scheduler{
-		cron.New(
-			cron.WithParser(
-				cron.NewParser(
-					cron.Descriptor|cron.SecondOptional|cron.Minute|cron.Hour|cron.Dom|cron.Month|cron.Dow,
+		Cron.New(
+			Cron.WithParser(
+				Cron.NewParser(
+					Cron.Descriptor|Cron.SecondOptional|Cron.Minute|Cron.Hour|Cron.Dom|Cron.Month|Cron.Dow,
 				),
 			),
-			cron.WithLogger(
-				cron.VerbosePrintfLogger(
+			Cron.WithLogger(
+				Cron.VerbosePrintfLogger(
 					log.New(logOut,
 						"go cron scheduler: ",
 						log.LstdFlags|log.Lmicroseconds|log.Llongfile|log.Lshortfile,

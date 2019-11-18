@@ -1,4 +1,4 @@
-module github.com/antparcse/schedule
+module github.com/golang-mixins/schedule
 
 go 1.13
 
